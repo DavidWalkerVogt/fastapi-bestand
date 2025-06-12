@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List
 from app.etl import fetch_data, transform_data
 
-app = FastAPI()
+app = FastAPI(title="Bestands-API")
 
 class ArticleRequest(BaseModel):
     article: List[str]
@@ -12,9 +12,9 @@ class ArticleRequest(BaseModel):
 def calculate_bestand(request: ArticleRequest):
     api_data = fetch_data()
     df = transform_data(api_data)
-
-    filtered_df = df[df["Teil"].isin(request.article)]
-    return filtered_df.to_dict(orient="records")
+    # Filter auf übergebene Artikelliste
+    filtered = df[df["Teil"].isin(request.article)]
+    return filtered.to_dict(orient="records")
 
 @app.get("/calculate_all", summary="Berechne alle Artikel")
 def calculate_all():

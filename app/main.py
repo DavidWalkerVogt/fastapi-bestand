@@ -11,13 +11,12 @@ class ArticleRequest(BaseModel):
 @app.post("/calculate", summary="Berechne nur bestimmte Artikel")
 def calculate_bestand(request: ArticleRequest):
     api_data = fetch_data()
-    df = transform_data(api_data)
-    # Filter auf übergebene Artikelliste
-    filtered = df[df["Teil"].isin(request.article)]
+    df       = transform_data(api_data)
+    filtered = df[df['Teil'].isin(request.article)]
     return filtered.to_dict(orient="records")
 
 @app.get("/calculate_all", summary="Berechne alle Artikel")
 def calculate_all():
     api_data = fetch_data()
-    df = transform_data(api_data)
+    df       = transform_data(api_data)
     return df.to_dict(orient="records")
